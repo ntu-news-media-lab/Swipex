@@ -5,7 +5,9 @@ function WebArticle() {
   return (
     <div className="web_article">
     <img src={today_screenshot} />
-    <button onClick={() => document.getElementsByClassName("test")} />
+    <button className="explore_btn" onClick={() => document.getElementsByClassName("article_overlay")[0].style.display="block"} >
+      Explore
+    </button>
     </div>
     
   );
