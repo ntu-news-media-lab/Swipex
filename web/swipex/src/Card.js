@@ -10,7 +10,11 @@ function Card(props) {
   return (
     <animated.div className="card" style={props.style}>
       <div className="card-category">{props.category}</div>
-      <div className="card-content">{props.content}</div>
+      <div className="card-content">
+        <div className="card-image-container"><img src={props.image} /></div>
+        <div className="card-title">{props.title}</div>
+        <div className="card-summary">{props.summary}</div>
+      </div>
     </animated.div>
   );
 }

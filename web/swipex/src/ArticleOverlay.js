@@ -4,6 +4,9 @@ import { useEffect, useState } from "react";
 import { useSpring, animated } from "react-spring";
 import { useDrag } from "react-use-gesture";
 import useWindowDimensions from "./windowsize";
+import image_1 from './res/image_1.png';
+import image_2 from './res/image_2.png';
+import image_3 from './res/image_3.png';
 
 
 
@@ -106,9 +109,9 @@ function ArticleOverlay() {
   return (
     <div className="article_overlay">
       <animated.div className="overlay-cards_container" {...bind()}>
-        <Card category="entertainment" content="3" style={swipeStyles[2]}/>
-        <Card category="sports" content="2" style={swipeStyles[1]}/>
-        <Card category="politics" content="1" style={swipeStyles[0]} view={false} />
+        <Card category="Entertainment" title="Gina Carano fired from The Mandalorian over offensive social media posts" summary="Gina Carano has been axed from The Mandalorian after she shared a few posts on Instagram Stories that compared being a Republican today to being Jewish during the Holocaust.The hashtag #FireGinaCarano trended online after her post, putting pressure onto Disney to drop the 38-year-old actress from the series." style={swipeStyles[2]} image={image_3}/>
+        <Card category="Crime & Accidents" title="Police probing two related unnatural deaths after duo found motionless at Tampines, Punggol blocks" summary="SINGAPORE — The police are investigating two related unnatural deaths after a woman was found motionless at the void deck of a public housing block in Tampines on Wednesday (Feb 10). An image of an official document and a photo of the woman have been making their rounds online and on messaging platforms.The police urged the public to refrain from circulating them out of respect for the deceased and their aggrieved families." style={swipeStyles[1]} image={image_2}/>
+        <Card category="TheBigRead" title="The Big Read: Goodbye T-score, goodbye PSLE stress? Not so fast, as anxious parents size up new scoring system" summary="The PSLE T-score system, which has been around for six decades, will be scrapped after this year. The impending change has garnered mixed reactions, with some parents saying it reduces unhealthy competition, while others are concerned it may add to the stre." style={swipeStyles[0]} view={false} image={image_1}/>
       </animated.div>
       <div className="overlay-buttons">buttons goes here</div>
     </div>
