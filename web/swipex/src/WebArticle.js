@@ -5,6 +5,7 @@ function WebArticle() {
   return (
     <div className="web_article">
     <img src={today_screenshot} />
+    <button onClick={() => document.getElementsByClassName("test")} />
     </div>
     
   );
