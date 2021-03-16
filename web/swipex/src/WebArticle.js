@@ -6,6 +6,7 @@ function WebArticle() {
     <div className="web_article">
     <img src={logo_today_solid} />
     Screenshot of our Figma design, with an invisible button to open our tool
+    <button onClick={() => document.getElementsByClassName("test")} />
     </div>
   );
 }
