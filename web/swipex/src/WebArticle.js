@@ -1,12 +1,12 @@
-import logo_today_solid from './res/logo_today_solid.png';
+import today_screenshot from './res/homepage.png';
 import './WebArticle.css';
 
 function WebArticle() {
   return (
     <div className="web_article">
-    <img src={logo_today_solid} />
-    Screenshot of our Figma design, with an invisible button to open our tool
+    <img src={today_screenshot} />
     </div>
+    
   );
 }
 
