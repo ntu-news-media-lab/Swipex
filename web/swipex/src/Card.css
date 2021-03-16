@@ -1,0 +1,43 @@
+/* touch area of cards is 8px horizontally wider than it appears */
+
+/* .card-frame {
+  position: absolute;
+  top: 0;
+  left: 0px;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(127, 255, 212, 0.151);
+} */
+
+.card {
+  position: absolute;
+  top: 0;
+  left: 0px;
+  height: 100%;
+  width: 100%;
+  padding: 0 8px 0 8px;
+  touch-action: pan-y; /* in order to work on chrome inspector */
+  /* opacity: 1; */
+}
+
+.card-category {
+  height: calc(1 / 9 * 100%);
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.card-content {
+  height: calc(8 / 9 * 100%);
+  background: #ffffff;
+  box-shadow: 0px 4px 25px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+}
+
+.card:nth-of-type(3) {
+  background-color: red;
+}
+.card:nth-of-type(2) {
+  background-color: green;
+}
+.card:nth-of-type(1) {
+  background-color: blue;
+}
