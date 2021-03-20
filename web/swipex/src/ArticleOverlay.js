@@ -107,7 +107,7 @@ function ArticleOverlay() {
   );
 
   return (
-    <div className="article_overlay">
+    <div className="article_overlay" >
       <animated.div className="overlay-cards_container" {...bind()}>
         <Card category="Entertainment" title="Gina Carano fired from The Mandalorian over offensive social media posts" summary="Gina Carano has been axed from The Mandalorian after she shared a few posts on Instagram Stories that compared being a Republican today to being Jewish during the Holocaust.The hashtag #FireGinaCarano trended online after her post, putting pressure onto Disney to drop the 38-year-old actress from the series." style={swipeStyles[2]} image={image_3}/>
         <Card category="Crime & Accidents" title="Police probing two related unnatural deaths after duo found motionless at Tampines, Punggol blocks" summary="SINGAPORE — The police are investigating two related unnatural deaths after a woman was found motionless at the void deck of a public housing block in Tampines on Wednesday (Feb 10). An image of an official document and a photo of the woman have been making their rounds online and on messaging platforms.The police urged the public to refrain from circulating them out of respect for the deceased and their aggrieved families." style={swipeStyles[1]} image={image_2}/>
