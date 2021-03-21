@@ -4,9 +4,28 @@
 
 .img_today_screenshot {
   width: 100%;
-  height: auto;
 }
 
+.explore_btn {
+  height: calc(40 / 100 * 20vw);
+  width: 25%;
+  background: #b93b2d;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 13px;
+  position: absolute;
+  right: 20%;
+  top: calc(20 / 100 * 20vw);
+}
+
+.scroll-lock {
+  /* margin: 0; */
+  /* height: 100%; */
+  overflow: hidden
+}
 
 /* .App {
   text-align: center;

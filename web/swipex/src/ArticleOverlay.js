@@ -5,9 +5,9 @@ import { useSpring, animated } from "react-spring";
 import { useDrag } from "react-use-gesture";
 import useWindowDimensions from "./windowsize";
 import image_1 from './res/image_1.png';
-import image_2 from './res/image_2.png';
+import image_2 from './res/horizontal.png';
 import image_3 from './res/image_3.png';
-import image_like from './res/image_like_1.png';
+import image_liked from './res/image_like.png';
 
 
 
@@ -76,6 +76,10 @@ function ArticleOverlay() {
         // drag to the left
         set({ x: 0 });
         newSwipeStyles[index] = { transform: `translate3d(${-SWIPED_CARDS_OFFSET}px, 0px, 0px)`, opacity: 0, transition: `transform 0.3s, opacity 0.3s`};
+        // TODO: implement fade to foreground
+        // if (index<article_length-1) {
+        //   newSwipeStyles[index+1] = { opacity: 1, transition: `opacity 0.3s`};
+        // } 
         setSwipeStyles(newSwipeStyles);
         setIndex(index+1);
 
@@ -83,13 +87,15 @@ function ArticleOverlay() {
         // drag to the right
         set({ x: 0 });
         newSwipeStyles[index-1] = { transform: `translate3d(0px, 0px, 0px)`, opacity: 1, transition: `transform 0.25s, opacity 0.25s`};
+        // TODO: implement fade to background
+        // newSwipeStyles[index] = { opacity: 1, transition: `opacity 0.3s`};
         setSwipeStyles(newSwipeStyles);
         setIndex(index-1);
         
       } else if (movement[0] >= 2 && index > 0) {
         // never drag right enough
         set({ x: -SWIPED_CARDS_OFFSET });
-        newSwipeStyles[index-1] = { transform: `translate3d(${-SWIPED_CARDS_OFFSET}px, 0px, 0px)`, transition: `transform 0.2s, opacity 0.3s` };
+        newSwipeStyles[index-1] = { transform: `translate3d(${-SWIPED_CARDS_OFFSET}px, 0px, 0px)`, transition: `transform 0.2s` };
         setSwipeStyles(newSwipeStyles);
 
       } else if (movement[0] <= -2) {
@@ -115,7 +121,7 @@ function ArticleOverlay() {
         <Card category="TheBigRead" title="The Big Read: Goodbye T-score, goodbye PSLE stress? Not so fast, as anxious parents size up new scoring system" summary="The PSLE T-score system, which has been around for six decades, will be scrapped after this year. The impending change has garnered mixed reactions, with some parents saying it reduces unhealthy competition, while others are concerned it may add to the stre." style={swipeStyles[0]} view={false} image={image_1}/>
       </animated.div>
       <div className="overlay-buttons">
-        <div className="button like-button"><img src={image_like}></img></div>
+        <div className="button like-button"><img src={image_liked}></img></div>
       </div>
     </div>
   );
