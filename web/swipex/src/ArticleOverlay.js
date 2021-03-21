@@ -7,7 +7,7 @@ import useWindowDimensions from "./windowsize";
 import image_1 from './res/image_1.png';
 import image_2 from './res/image_2.png';
 import image_3 from './res/image_3.png';
-import image_like from './res/image_like.png';
+import image_like from './res/image_like_1.png';
 
 
 
@@ -115,7 +115,7 @@ function ArticleOverlay() {
         <Card category="TheBigRead" title="The Big Read: Goodbye T-score, goodbye PSLE stress? Not so fast, as anxious parents size up new scoring system" summary="The PSLE T-score system, which has been around for six decades, will be scrapped after this year. The impending change has garnered mixed reactions, with some parents saying it reduces unhealthy competition, while others are concerned it may add to the stre." style={swipeStyles[0]} view={false} image={image_1}/>
       </animated.div>
       <div className="overlay-buttons">
-        <button className="button like-button"><img src="image_like_1.png" ></img></button>
+        <div className="button like-button"><img src={image_like}></img></div>
       </div>
     </div>
   );

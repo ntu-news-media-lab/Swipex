@@ -13,7 +13,7 @@
 }
 
 .overlay-cards_container {
-  height: 93%;
+  height: 90%;
   width: 90%;
   position: relative;
   align-content: center;
@@ -36,7 +36,8 @@
 
 .button {
   background-color: #DBDBDB;
-  ;
+  position: absolute;
+  left: 250px;
   border: none;
   color: white;
   padding: 20px;
