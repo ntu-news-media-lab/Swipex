@@ -3,9 +3,6 @@ import { useEffect, useState } from "react";
 import { useSpring, animated } from "react-spring";
 import { useDrag } from "react-use-gesture";
 
-// const DRAG_THRESHOLD = 150;
-// const SWIPED_CARDS_OFFSET = 500;
-
 function Card(props) {
 
   // const 

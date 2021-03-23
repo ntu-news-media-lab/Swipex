@@ -7,9 +7,25 @@
   position: absolute;
   top: 0px;
   left: 0px;
-  padding: 0 16px 0 16px;
   opacity: 0;
   display: none;
+}
+
+.swipe_container {
+  height: 100%;
+  width: 100%;
+  transform: translate3d(0, 0, 0);
+  transition: transform 0.45s cubic-bezier(.4,.05,0,1);
+}
+
+.swipe_container.swiped_up {
+  transform: translate3d(0, -100vh, 0);
+}
+
+.card_view {
+  height: 100%;
+  width: 100%;
+  padding: 0 16px 0 16px;
 }
 
 .overlay-cards_container {
@@ -26,27 +42,49 @@
 
 .overlay-buttons {
   height: 12.5%;
-  /* background: rgba(0, 0, 0, 0.1); */
+  /* justify-content: center;
+  justify-content: space-evenly;
+  display: flex;
+  align-items: center; */
 }
 
 .button {
   background-color: #DBDBDB;
-  position: absolute;
-  left: 250px;
-  border: none;
-  color: white;
-  padding: 16px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  margin: 4px 2px;
-}
-
-.like-button {
+  position: absolute; /* can remove if display flex on overlay-buttons is enabled */
   border-radius: 50%;
+  color: white; /* change to rgba so that it is translucent */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
 }
 
-.like-button img {
-  width: 20px;
+.like_button {
+  left: 250px;
+  bottom: 20px;
+}
+
+.like_button img {
+  width: 24px;
+}
+
+.button:nth-child(1) {
+  display: none;
+}
+
+.read_more-button {
+  padding: 8px;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 12px;
+  font-weight: bold;
+  color: #C2C2C2;
+}
+
+.read_more-button img {
+  width: 16px;
+  margin: 0 0 8px 0;
+  position: relative;  
 }
