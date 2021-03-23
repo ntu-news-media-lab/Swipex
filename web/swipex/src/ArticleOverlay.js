@@ -134,7 +134,7 @@ function ArticleOverlay() {
         <Card category="TheBigRead" title="The Big Read: Goodbye T-score, goodbye PSLE stress? Not so fast, as anxious parents size up new scoring system" summary="The PSLE T-score system, which has been around for six decades, will be scrapped after this year. The impending change has garnered mixed reactions, with some parents saying it reduces unhealthy competition, while others are concerned it may add to the stre." style={swipeStyles[0]} view={false} image={image_1}/>
       </animated.div>
       <div className="overlay-buttons">
-        <div className="button"></div>
+        {/* <div className="button"></div> */}
         <div className="read_more-button" onClick={() => {
             document.getElementsByClassName("swipe_container")[0].classList.add("swiped_up");
         }}
@@ -142,7 +142,7 @@ function ArticleOverlay() {
           <img src={arrow_up}></img>
           Swipe to Read More
         </div>
-        <div className="button like_button"><img src={image_liked}></img></div>
+        {/* <div className="button like_button"><img src={image_liked}></img></div> */}
       </div>
       </div>
       <SwipeArticle html_render={"hello world"}/>
