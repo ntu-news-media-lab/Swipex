@@ -16,7 +16,7 @@ import arrow_up from './res/arrow_up.svg';
 
 function ArticleOverlay() {
   const domain = "https://reqres.in";
-  const NUM_CARDS = 10;
+  const NUM_CARDS = 3;
 
   const WINDOW_SIZE = useWindowDimensions();
   const DRAG_LEFT_THRESHOLD = WINDOW_SIZE.width/3.5;
