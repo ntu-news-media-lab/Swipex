@@ -11,6 +11,7 @@ import image_2 from './res/horizontal.png';
 import image_3 from './res/vertical_image.png';
 import image_liked from './res/image_like.png';
 import arrow_up from './res/arrow_up.svg';
+import close_button from './res/close_button.png';
 
 
 
@@ -144,7 +145,9 @@ function ArticleOverlay() {
         </div>
         {/* <div className="button like_button"><img src={image_liked}></img></div> */}
       </div>
-      <div className="close_overlay"></div>
+      <div className="close_overlay">
+        <img src={close_button}/>
+      </div>
       </div>
       <SwipeArticle html_render={"hello world"}/>
       </div>
