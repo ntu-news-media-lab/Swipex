@@ -124,11 +124,22 @@ function ArticleOverlay() {
     }
   );
 
+  // var cards = [];
+  // for (var i = 0; i < numrows; i++) {
+  //   // note: we are adding a key prop here to allow react to uniquely identify each
+  //   // element in this array. see: https://reactjs.org/docs/lists-and-keys.html
+  //   rows.push(<ObjectRow key={i} />);
+  //   }
+  //   <tbody>{rows}</tbody>;
+    
+    
+
   return (
     <div className="article_overlay" >
       <div className="swipeup_container">
       <div className="card_view">
       <animated.div className="overlay-cards_container" {...bind()}>
+      {/* {articles.map((object, i) => <Card category={object.section} title={object.title} summary={object.content} style={swipeStyles[i]} image={object.image} counter={i} />)} */}
         <Card category="Entertainment" title="Gina Carano fired from The Mandalorian over offensive social media posts" summary="Gina Carano has been axed from The Mandalorian after she shared a few posts on Instagram Stories that compared being a Republican today to being Jewish during the Holocaust.The hashtag #FireGinaCarano trended online after her post, putting pressure onto Disney to drop the 38-year-old actress from the series." style={swipeStyles[2]} image={image_3} counter="3/10" />
         <Card category="Entertainment" title="K-pop for the planet: Fans of South Korean stars take up climate activism" summary="      JAKARTA — From petitioning to save forests to raising cash for disaster victims, a growing army of K-pop fans worldwide has emerged as the latest force in the global fight against climate change." style={swipeStyles[1]} image={image_2} counter="2/10"/>
         <Card category="TheBigRead" title="The Big Read: Goodbye T-score, goodbye PSLE stress? Not so fast, as anxious parents size up new scoring system" summary="The PSLE T-score system, which has been around for six decades, will be scrapped after this year. The impending change has garnered mixed reactions, with some parents saying it reduces unhealthy competition, while others are concerned it may add to the stre." style={swipeStyles[0]} view={false} image={image_1} counter="1/10"/>

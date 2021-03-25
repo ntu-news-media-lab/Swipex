@@ -4,7 +4,7 @@ import { useSpring, animated } from "react-spring";
 import { useDrag } from "react-use-gesture";
 
 function Card(props) {
-  // const
+  
 
   return (
     <animated.div className="card" style={props.style}>
