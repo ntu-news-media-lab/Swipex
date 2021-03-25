@@ -86,3 +86,14 @@
   margin: 0 0 8px 0;
   position: relative;  
 }
+
+.close_overlay {
+  position: absolute;
+  height: calc(1.5 / 30 * 100%);
+  top: calc(1.5 / 30 * 100%);
+  right: 9vw;
+  border-radius: 13.5px;
+  display: inline-flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+}
