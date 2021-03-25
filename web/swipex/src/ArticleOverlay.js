@@ -8,14 +8,14 @@ import useWindowDimensions from "./windowsize";
 import {getData, postData} from "./xmlhttprequest";
 import image_1 from './res/image_1.png';
 import image_2 from './res/horizontal.png';
-import image_3 from './res/image_3.png';
+import image_3 from './res/vertical_image.png';
 import image_liked from './res/image_like.png';
 import arrow_up from './res/arrow_up.svg';
 
 
 
 function ArticleOverlay() {
-  const domain = "https://reqres.in";
+  const domain = "http://localhost:8000";
   const NUM_CARDS = 3;
 
   const WINDOW_SIZE = useWindowDimensions();
@@ -26,7 +26,7 @@ function ArticleOverlay() {
   const MAGIC_MULTIPLIER_VERTICAL = 14;
   const MAGIC_MULTIPLIER_ROTATE = 3;
   const OPACITY_TRANSITION = 0.35;
-  const TRANSFORM_TRANSITION = 0.2;
+  const TRANSFORM_TRANSITION = 0.25;
 
   const [index, setIndex] = useState(0);
   // const [index_changed, setIndexChanged] = useState(0);
@@ -35,7 +35,7 @@ function ArticleOverlay() {
   const [articles, setArticles] = useState(Array(NUM_CARDS).fill(null));
 
   useEffect(() => {
-    fetch(`${domain}/api/users?page=2`, {
+    fetch(`${domain}/news`, {
       // method: "POST", // or 'PUT'
       // headers: {
       //   "Content-Type": "application/json",
@@ -86,7 +86,7 @@ function ArticleOverlay() {
       } else if (movement[0] < -DRAG_LEFT_THRESHOLD && index < NUM_CARDS-1) {
         // drag to the left
         set({ x: 0 });
-        newSwipeStyles[index] = { transform: `translate3d(${-SWIPED_CARDS_OFFSET}px, ${-MAGIC_MULTIPLIER_VERTICAL}px, 0px) rotate3d(0, 0, 1, ${MAGIC_MULTIPLIER_ROTATE}deg)`, opacity: 0, transition: `transform ${TRANSFORM_TRANSITION}s, opacity ${OPACITY_TRANSITION}s`};
+        newSwipeStyles[index] = { transform: `translate3d(${-SWIPED_CARDS_OFFSET}px, ${-MAGIC_MULTIPLIER_VERTICAL}px, 0px) rotate3d(0, 0, 1, ${MAGIC_MULTIPLIER_ROTATE}deg)`, opacity: 0, transition: `transform ${TRANSFORM_TRANSITION}s, opacity ${OPACITY_TRANSITION}s ease-out`};
         if (index<NUM_CARDS-1) {
           newSwipeStyles[index+1] = { opacity: 1};
         }
@@ -96,7 +96,7 @@ function ArticleOverlay() {
       } else if (movement[0] > DRAG_RIGHT_THRESHOLD && index > 0) {
         // drag to the right
         set({ x: 0 });
-        newSwipeStyles[index-1] = { transform: `translate3d(0px, 0px, 0px)`, opacity: 1, transition: `transform ${TRANSFORM_TRANSITION}s, opacity ${OPACITY_TRANSITION}s`};
+        newSwipeStyles[index-1] = { transform: `translate3d(0px, 0px, 0px)`, opacity: 1, transition: `transform ${TRANSFORM_TRANSITION}s, opacity ${OPACITY_TRANSITION}s ease-out`};
         newSwipeStyles[index] = { opacity: 0};
         setSwipeStyles(newSwipeStyles);
         setIndex(index-1);
@@ -104,14 +104,14 @@ function ArticleOverlay() {
       } else if (movement[0] >= 2 && index > 0) {
         // never drag right enough
         set({ x: 0 });
-        newSwipeStyles[index-1] = { transform: `translate3d(${-SWIPED_CARDS_OFFSET}px, ${-MAGIC_MULTIPLIER_VERTICAL}px, 0px) rotate3d(0, 0, 1, ${MAGIC_MULTIPLIER_ROTATE}deg)`, transition: `transform ${TRANSFORM_TRANSITION}s, opacity ${OPACITY_TRANSITION}s` };
+        newSwipeStyles[index-1] = { transform: `translate3d(${-SWIPED_CARDS_OFFSET}px, ${-MAGIC_MULTIPLIER_VERTICAL}px, 0px) rotate3d(0, 0, 1, ${MAGIC_MULTIPLIER_ROTATE}deg)`, transition: `transform ${TRANSFORM_TRANSITION}s, opacity ${OPACITY_TRANSITION}s ease-out` };
         newSwipeStyles[index] = { opacity: 1};
         setSwipeStyles(newSwipeStyles);
 
       } else if (movement[0] <= -2 && index < NUM_CARDS-1) {
         // never drag left enough
         set({ x: 0 });
-        newSwipeStyles[index] = { transform: x.interpolate((x) => `translate3d(${x}px, 0px, 0px)`), transition: `opacity ${OPACITY_TRANSITION}s`};
+        newSwipeStyles[index] = { transform: x.interpolate((x) => `translate3d(${x}px, 0px, 0px)`), transition: `opacity ${OPACITY_TRANSITION}s ease-out`};
         newSwipeStyles[index + 1] = { opacity: 0};
         setSwipeStyles(newSwipeStyles);
       }
@@ -126,7 +126,7 @@ function ArticleOverlay() {
 
   return (
     <div className="article_overlay" >
-      <div className="swipe_container">
+      <div className="swipeup_container">
       <div className="card_view">
       <animated.div className="overlay-cards_container" {...bind()}>
         <Card category="Entertainment" title="Gina Carano fired from The Mandalorian over offensive social media posts" summary="Gina Carano has been axed from The Mandalorian after she shared a few posts on Instagram Stories that compared being a Republican today to being Jewish during the Holocaust.The hashtag #FireGinaCarano trended online after her post, putting pressure onto Disney to drop the 38-year-old actress from the series." style={swipeStyles[2]} image={image_3} counter="3/10" />
@@ -136,7 +136,7 @@ function ArticleOverlay() {
       <div className="overlay-buttons">
         {/* <div className="button"></div> */}
         <div className="read_more-button" onClick={() => {
-            document.getElementsByClassName("swipe_container")[0].classList.add("swiped_up");
+            document.getElementsByClassName("swipeup_container")[0].classList.add("swiped_up");
         }}
         >
           <img src={arrow_up}></img>
@@ -144,6 +144,7 @@ function ArticleOverlay() {
         </div>
         {/* <div className="button like_button"><img src={image_liked}></img></div> */}
       </div>
+      <div className="close_overlay"></div>
       </div>
       <SwipeArticle html_render={"hello world"}/>
       </div>

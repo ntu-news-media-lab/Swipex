@@ -4,8 +4,7 @@ import { useSpring, animated } from "react-spring";
 import { useDrag } from "react-use-gesture";
 
 function Card(props) {
-
-  // const 
+  // const
 
   return (
     <animated.div className="card" style={props.style}>
@@ -17,8 +16,10 @@ function Card(props) {
           <img src={props.image} className="blur-img" />
         </div>
         <div className="card-counter">{props.counter}</div>
-        <div className="card-title">{props.title}</div>
-        <div className="card-summary">{props.summary}</div>
+        <div className="card-text">
+          <div className="card-title">{props.title}</div>
+          <div className="card-summary">{props.summary}</div>
+        </div>
       </div>
     </animated.div>
   );
