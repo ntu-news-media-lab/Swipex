@@ -7,18 +7,11 @@
 }
 
 .explore_btn {
-  height: calc(40 / 100 * 20vw);
-  width: 25%;
-  background: #b93b2d;
-  border-radius: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #ffffff;
-  font-size: 13px;
-  position: absolute;
-  right: 20%;
-  top: calc(20 / 100 * 20vw);
+  height: 64px;
+  width: 64px;
+  position: fixed;
+  right: 3vw;
+  bottom: 3vw;
 }
 
 .scroll-lock {
