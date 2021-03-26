@@ -147,13 +147,15 @@ function ArticleOverlay() {
       </div>
       <img src={close_button}
         className="close_overlay"
-        onClick={() => {
-          // document.getElementsByClassName("article_overlay")[0].style.display = "none";
+        onClick={() => {          
           setTimeout(function () {
             document.getElementsByClassName("article_overlay")[0].classList.add("fadeout");
             // document.getElementsByClassName("article_overlay")[0].classList.remove("fadein");
             document.getElementsByTagName("body")[0].classList.remove("scroll-lock");
           }, 10);
+          setTimeout(function () {
+            document.getElementsByClassName("article_overlay")[0].style.display = "none";
+          }, 500);
         }}
       />
         
