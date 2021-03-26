@@ -33,6 +33,7 @@ function ArticleOverlay() {
   const TRANSFORM_TRANSITION = 0.25;
 
   const [userId, setUserId] = useState(undefined);
+  const [userPrefs, setUserPrefs] = useState(undefined);
   const [index, setIndex] = useState(0);
   var prevIndex = usePrevious(index);
   const [swipeStyles, setSwipeStyles] = useState(Array(NUM_CARDS).fill({ opacity: 0 }, 1));
@@ -41,18 +42,34 @@ function ArticleOverlay() {
   const [articles, setArticles] = useState(undefined);
 
   useEffect(() => {
+    let user_id;
+    let user_prefs;
+
     if (window.localStorage) {
-      let user_id = window.localStorage.getItem("user_id");
+      user_id = window.localStorage.getItem("user_id");
       if (user_id == undefined){
         user_id = uuidv4();
         window.localStorage.setItem("user_id", user_id);
         console.log("creating new user_id...");
       }
       setUserId(user_id);
-      console.log(user_id);
+      console.log(window.localStorage.getItem("user_prefs"), window.localStorage.getItem("user_prefs") == undefined);
+      user_prefs = window.localStorage.getItem("user_prefs");
+      if (window.localStorage.getItem("user_prefs") == undefined) {
+        user_prefs = 0;
+      } else {
+        user_prefs = JSON.parse(user_prefs);
+      }
+      // console.log(user_prefs, user_prefs[0]);
+      // console.log(JSON.parse(user_prefs), JSON.parse(user_prefs)[0]);
+      setUserPrefs(user_prefs);
     } else {
       alert("Sorry! Your browser does not support the use of local storage! We recommend using either Chrome or Safari!")
     }
+    console.log(`user_id (prob not updated): ${userId}`);
+    console.log(`user_prefs (prob not updated): ${userPrefs}`);
+    console.log(`user_id:`, user_id);
+    console.log(`user_prefs:`, user_prefs);
 
     fetch(`${domain}/news`, {
       // method: "POST", // or 'PUT'
@@ -63,8 +80,7 @@ function ArticleOverlay() {
     })
       .then((results) => results.json())
       .then((data) => {
-        console.log("SUCCESS");
-        console.log(data);
+        console.log("Success: /news", data);
         setArticles(data);
         setTimings(data.map((object, i) => ({ news_id: object.news_id, seconds_spent: 0})));
       });
@@ -72,10 +88,18 @@ function ArticleOverlay() {
   }, []);
 
   useEffect(() => {
-    if (prevIndex !== undefined){
-      timings[prevIndex].seconds_spent += ((new Date).getTime() - timer) / 1000;
+    console.log(`user_id:`, userId);
+    console.log(`user_prefs:`, userPrefs);
+    if (prevIndex !== undefined) {
+      var new_timings = timings.map(object => ({news_id: object.news_id, seconds_spent: object.seconds_spent}));
+      new_timings[prevIndex].seconds_spent += ((new Date).getTime() - timer) / 1000;
+      setTimings(new_timings);
       setTimer((new Date).getTime());
-      console.log(timings[prevIndex].news_id, timings[prevIndex].seconds_spent);
+      console.log(`news_id/index: ${new_timings[prevIndex].news_id}/${prevIndex}`, `seconds_spent: ${new_timings[prevIndex].seconds_spent}`);
+    }
+    if (index>=5) {
+      window.localStorage.setItem("user_prefs", JSON.stringify(new_timings));
+      console.log(JSON.parse(window.localStorage.getItem("user_prefs")));
     }
   }, [index]);
 
@@ -190,15 +214,12 @@ function ArticleOverlay() {
       </div>
       <img src={close_button}
         className="close_overlay"
-        onClick={() => {          
-          setTimeout(function () {
-            document.getElementsByClassName("article_overlay")[0].classList.add("fadeout");
+        onClick={() => {
             document.getElementsByClassName("article_overlay")[0].classList.remove("fadein");
             document.getElementsByTagName("body")[0].classList.remove("scroll-lock");
-          }, 10);
           setTimeout(function () {
             document.getElementsByClassName("article_overlay")[0].style.display = "none";
-          }, 500);
+          }, 500); // must align this with the length of the opacity transition on article_overlay css class
         }}
       />
         
