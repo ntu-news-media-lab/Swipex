@@ -4,18 +4,19 @@
   height: 100vh;
   width: 100vw;
   background-color: rgba(81, 81, 81, 0.9);
-  position: absolute;
+  position: fixed;
   top: 0px;
   left: 0px;
   opacity: 0;
   display: none;
+  transition: opacity 0.5s;
 }
 
 .swipeup_container {
   height: 100%;
   width: 100%;
   transform: translate3d(0, 0, 0);
-  transition: transform 0.45s cubic-bezier(.4,.05,0,1);
+  transition: transform 0.5s cubic-bezier(.4,.05,0,1);
 }
 
 .swipeup_container.swiped_up {
@@ -37,7 +38,6 @@
 
 .fadein {
   opacity: 1.0;
-  transition: opacity 0.5s;
 }
 
 .overlay-buttons {
@@ -73,6 +73,7 @@
 
 .read_more-button {
   padding: 8px;
+  letter-spacing: 0.5px;
   display: inline-flex;
   flex-direction: column;
   align-items: center;

@@ -19,11 +19,8 @@
 }
 
 .article_content {
-  font-family: Lato;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 8px;
-  line-height: 15px;
+  font-size: 12px;
+  line-height: 19px;
   /* or 125% */
 
   display: flex;

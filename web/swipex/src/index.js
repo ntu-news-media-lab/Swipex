@@ -3,7 +3,6 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import WebArticle from "./WebArticle";
 import ArticleOverlay from "./ArticleOverlay";
-import ArticleOverlay_alt from "./ArticleOverlay_alternative_test";
 import reportWebVitals from "./reportWebVitals";
 
 import { useSpring, animated } from "react-spring";
@@ -11,13 +10,13 @@ import { useDrag } from "react-use-gesture";
 
 ReactDOM.render(
   <React.StrictMode>
-    <WebArticle />
     <ArticleOverlay />
     {/* <Toggle /> */}
     {/* <Example /> */}
   </React.StrictMode>,
   document.getElementById("root")
 );
+
 
 function Toggle() {
   const [toggled, setToggled] = useState(false);

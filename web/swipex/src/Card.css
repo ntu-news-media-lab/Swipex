@@ -43,6 +43,8 @@
   background: #ffffff;
   box-shadow: 0px 4px 25px rgba(0, 0, 0, 0.3);
   margin: auto;
+  display: flex;
+  flex-direction: column;
 }
 
 .card-counter {
@@ -64,26 +66,31 @@
   align-items: center;
   justify-content: center;
   position: relative;
+  flex-shrink: 0;
 }
 
 .card-image-container .main-img {
-  max-width: 100%;
-  max-height: calc(100vw - (16px + 16px) * 2); /* 16px is article-overlay padding, 16px is card padding */
   position: relative;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
   z-index: 1;
   /* will not use white shadow cos there might be dark images*/
   /* box-shadow: 0 0 20px 30px rgba(255, 255, 255, 0.5); */
 }
 
 .card-image-container .blur-img {
-  width: 100%;
-  height: calc(100vw - (16px + 8px) * 2);
+  width: 105%;
+  height: 105%;
   filter: blur(8px);
   position: absolute;
 }
 
 .card-text {
   padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
 }
 
 .card-title {
@@ -102,11 +109,10 @@
 
 .card-summary {
   font-size: 11px;
-  line-height: 16px;
+  line-height: 17px;
   /* or 125% */
 
-  display: flex;
-  align-items: center;
+  overflow-y: auto;
   padding: 4px 0;
 
   color: rgba(81, 81, 81, 0.9);
