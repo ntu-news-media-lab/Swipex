@@ -150,7 +150,7 @@ function ArticleOverlay() {
         onClick={() => {          
           setTimeout(function () {
             document.getElementsByClassName("article_overlay")[0].classList.add("fadeout");
-            // document.getElementsByClassName("article_overlay")[0].classList.remove("fadein");
+            document.getElementsByClassName("article_overlay")[0].classList.remove("fadein");
             document.getElementsByTagName("body")[0].classList.remove("scroll-lock");
           }, 10);
           setTimeout(function () {
