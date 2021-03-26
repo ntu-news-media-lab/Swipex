@@ -188,9 +188,20 @@ function ArticleOverlay() {
         </div>
         {/* <div className="button like_button"><img src={image_liked}></img></div> */}
       </div>
-      <div className="close_overlay">
-        <img src={close_button}/>
-      </div>
+      <img src={close_button}
+        className="close_overlay"
+        onClick={() => {          
+          setTimeout(function () {
+            document.getElementsByClassName("article_overlay")[0].classList.add("fadeout");
+            document.getElementsByClassName("article_overlay")[0].classList.remove("fadein");
+            document.getElementsByTagName("body")[0].classList.remove("scroll-lock");
+          }, 10);
+          setTimeout(function () {
+            document.getElementsByClassName("article_overlay")[0].style.display = "none";
+          }, 500);
+        }}
+      />
+        
       </div>
       <SwipeArticle html_render={"hello world"}/>
       </div>
