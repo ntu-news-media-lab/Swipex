@@ -40,6 +40,11 @@
   transition: opacity 0.5s;
 }
 
+.fadeout {
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
 .overlay-buttons {
   height: 10%;
   justify-content: center;
