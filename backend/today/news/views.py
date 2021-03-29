@@ -18,7 +18,7 @@ class NewsViewSet(viewsets.ModelViewSet):
 				readers = Reader.objects.filter(user_id = reader).values_list('has_read', flat=True)
 				queryset = News.objects.exclude(news_id__in = readers )
 			else:
-				queryset = News.objects.all().order_by('news_id')
+				queryset = News.objects.all().order_by('?')
 			return queryset
 	
 
