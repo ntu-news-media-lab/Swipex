@@ -46,17 +46,6 @@
   color: #808080;
 }
 
-.swipedown_container {
-  height: 100%;
-  width: 100%;
-  transform: translate3d(0, 0, 0);
-  transition: transform 0.45s cubic-bezier(.4,.05,0,1);
-}
-
-.swipedown_container.swiped_down {
-  transform: translate3d(0, 100vh, 0);
-}
-
 .overlay-buttons {
   height: 10%;
   justify-content: center;

@@ -47,6 +47,21 @@
   flex-direction: column;
 }
 
+.card-content.tutorial {
+  top: calc((0.5 + 1.5 + 1.5) / 30 * 100%);
+  background: transparent;
+  box-shadow: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-content.tutorial img {
+  height: 100%;
+  object-fit: contain;
+  box-shadow: 0px 4px 25px rgba(0, 0, 0, 0.3);
+}
+
 .card-counter {
   position: absolute;
   right: 3vw;

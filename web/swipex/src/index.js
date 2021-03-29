@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
-import WebArticle from "./WebArticle";
 import ArticleOverlay from "./ArticleOverlay";
 import reportWebVitals from "./reportWebVitals";
 

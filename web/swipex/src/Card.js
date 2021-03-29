@@ -5,7 +5,6 @@ import { useDrag } from "react-use-gesture";
 
 function Card(props) {
   
-
   return (
     <animated.div className="card" style={props.style}>
       <div className="card-category">{props.category}</div>
