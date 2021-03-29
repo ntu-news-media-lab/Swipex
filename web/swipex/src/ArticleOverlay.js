@@ -23,7 +23,7 @@ import CardTutorial from "./CardTutorial.js";
 
 
 function ArticleOverlay() {
-  const domain = "http://localhost:8000";
+  const domain = "http://localhost:8000/";
   const NUM_ARTICLE_CARDS = 10; // max total no. of swipeable article cards
   const REC_THRESHOLD = 5; // calculate preferences when at least 5 cards are viewed and timings noted
   const tutorial_render = [tutorial_1, tutorial_2, tutorial_3];
@@ -31,6 +31,7 @@ function ArticleOverlay() {
   const CATEGORIES = ["singapore", "world", "big-read"];
   const NUM_CATEGORIES = CATEGORIES.length;
   const READ_TIME_THRESHOLD = 7;
+  const MAX_SENSITIVITY_BUFFER = 4;
 
   const WINDOW_SIZE = useWindowDimensions();
   const DRAG_LEFT_THRESHOLD = WINDOW_SIZE.width / 4.5;
@@ -53,7 +54,6 @@ function ArticleOverlay() {
   const [allArticles, setAllArticles] = useState(undefined);
   const [viewArticles, setViewArticles] = useState(undefined);
   const [numTutorialCards, setNumTutorialCards] = useState(0);
-  // TODO: const [reads, setReads] = useState([]);
 
   useEffect(() => {
     let user_id;
@@ -86,7 +86,7 @@ function ArticleOverlay() {
     console.log(`user_id:`, user_id);
     console.log(`user_prefs:`, user_prefs);
 
-    fetch(`${domain}/news`, {
+    fetch(`${domain}news/`, {
       // method: "POST", // or 'PUT'
       // headers: {
       //   "Content-Type": "application/json", TODO: GET userId state to api
@@ -120,7 +120,7 @@ function ArticleOverlay() {
   useEffect(() => {
     let new_user_prefs;
     if (prevPosition !== undefined) {
-      var new_timings = {...viewTimings};
+      var new_timings = { ...viewTimings };
       let new_time = ((new Date).getTime() - timer) / 1000;
       if (prevPosition >= numTutorialCards) {
         if (new_timings[viewArticles[prevPosition - numTutorialCards]["news_id"]] == undefined) {
@@ -131,14 +131,14 @@ function ArticleOverlay() {
         setViewTimings(new_timings);
         if (new_time > READ_TIME_THRESHOLD) {
           // Mark as read
-          fetch(`${domain}/readers`, {
+          fetch(`${domain}readers/`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
               user_id: userId,
-              has_read: new_timings[viewArticles[prevPosition - numTutorialCards]["news_id"]],
+              has_read: viewArticles[prevPosition - numTutorialCards]["news_id"],
             }),
           }).catch(console.log("failed to mark as read"))
         }
@@ -148,55 +148,57 @@ function ArticleOverlay() {
         // if there are tutorial cards, start timer for 1st card only when the curent article order is the first article card
         setTimer((new Date).getTime());
       }
-    
-    if (Object.keys(new_timings).length >= REC_THRESHOLD) {
-      let category;
-      let total = 0;
-      if (userPrefs) {
-        new_user_prefs = userPrefs;
-        // TODO: calculate user prefs
-        // new_user_prefs = CATEGORIES.reduce(function (map, category) {
-        //   map[category] = {score: 0, num_cards: 0};
-        //   return map;
-        // }, {});
-        // console.log(new_timings);
-        // for (let news_id in new_timings) {
-        //   category = allArticles[news_id]["section"];
-        //   new_user_prefs[category]["score"] += (new_timings[news_id])**(1/2);
-        //   new_user_prefs[category]["num_cards"] += 1;
-        // }
-      } else {
-        // initalize new_user_prefs
+
+
+      if (userPrefs || Object.keys(new_timings).length >= REC_THRESHOLD) {
+
         new_user_prefs = CATEGORIES.reduce(function (map, category) {
-          map[category] = {score: 0, num_cards: 0};
+          map[category] = { score: 0, num_cards: 0, sensitivity_buffer:0 };
           return map;
         }, {});
         console.log(new_timings);
         for (let news_id in new_timings) {
-          category = allArticles[news_id]["section"];
-          new_user_prefs[category]["score"] += (new_timings[news_id])**(1/2); // the more time you read, the less important that additional time spent is
+          let category = allArticles[news_id]["section"];
+          new_user_prefs[category]["score"] += (new_timings[news_id]) ** (1 / 2); // the more time you read, the less important that additional time spent is
           new_user_prefs[category]["num_cards"] += 1;
+          new_user_prefs[category]["sensitivity_buffer"] += 1;
         }
         for (let category in new_user_prefs) {
-          new_user_prefs[category]["score"] = new_user_prefs[category]["score"]/new_user_prefs[category]["num_cards"]; // weighted by the number of each category that appear
-        }
-        total = Object.values(new_user_prefs).reduce((t, value) => t + value['score'], 0);
-        for (let category in new_user_prefs) {
-          new_user_prefs[category]["score"] = new_user_prefs[category]["score"]/total; // sum total to be = 1 for better interpretation
+          if (new_user_prefs[category]["num_cards"] > 0) {
+            new_user_prefs[category]["score"] = new_user_prefs[category]["score"] / new_user_prefs[category]["num_cards"]; // weighted by the number of each category that appear
+          }
         }
         console.log(new_user_prefs);
+
+        if (userPrefs) {
+          // if returning user, modify user prefs
+          let old_user_prefs = { ...userPrefs };
+          for (let category in old_user_prefs) {
+            if (new_user_prefs[category]["sensitivity_buffer"] < MAX_SENSITIVITY_BUFFER) {
+              new_user_prefs[category]["score"] = (new_user_prefs[category]["score"] * new_user_prefs[category]["num_cards"] + old_user_prefs[category]["score"] * old_user_prefs[category]["num_cards"])/(new_user_prefs[category]["num_cards"]+old_user_prefs[category]["num_cards"])
+              new_user_prefs[category]["sensitivity_buffer"] += 1;
+            } else {
+              new_user_prefs[category]["score"] = (new_user_prefs[category]["score"] * (MAX_SENSITIVITY_BUFFER-1) + old_user_prefs[category]["score"])/MAX_SENSITIVITY_BUFFER;
+            }
+            new_user_prefs[category]["num_cards"] += old_user_prefs[category]["num_cards"]; 
+          }
+          setUserPrefs(new_user_prefs);
+        }
+
+        window.localStorage.setItem("user_prefs", JSON.stringify(new_user_prefs));
       }
-      window.localStorage.setItem("user_prefs", JSON.stringify(new_user_prefs));
-      setUserPrefs(new_user_prefs);
+
+
+      if (Object.keys(new_timings).length == position) { // if we swiped 5 articles, our prevPosition was 4, so our position is 5
+        // TODO: Filter and the next of the remaining NUM_ARTICLE_CARDS - (REC_THRESHOLD + 1) cards
+        // total = Object.values(new_user_prefs).reduce((t, value) => t + value['score'], 0);
+        // for (let category in new_user_prefs) {
+        //   new_user_prefs[category]["score"] = new_user_prefs[category]["score"]/total; // sum total to be = 1 for better interpretation
+        // }
+      }
+
+
     }
-
-    if (Object.keys(new_timings).length == position) { // if we swiped 5 articles, our prevPosition was 4, so our position is 5
-      // TODO: Filter and the next of the remaining NUM_ARTICLE_CARDS - (REC_THRESHOLD + 1) cards
-      // use new_user_prefs
-    }
-
-
-  }
   }, [position]);
 
   const [{ x }, set] = useSpring(() => ({
@@ -326,14 +328,14 @@ function ArticleOverlay() {
                   setViewTimings(new_timings);
                   if (new_time > READ_TIME_THRESHOLD) {
                     // Mark as read
-                    fetch(`${domain}/readers`, {
+                    fetch(`${domain}readers/`, {
                       method: 'POST',
                       headers: {
                         'Content-Type': 'application/json',
                       },
                       body: JSON.stringify({
                         user_id: userId,
-                        has_read: new_timings[viewArticles[prevPosition - numTutorialCards]["news_id"]],
+                        has_read: viewArticles[prevPosition - numTutorialCards]["news_id"],
                       }),
                     }).catch(console.log("failed to mark as read"))
                   }
