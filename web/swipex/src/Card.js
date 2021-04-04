@@ -1,7 +1,5 @@
 import "./Card.css";
-import { useEffect, useState } from "react";
-import { useSpring, animated } from "react-spring";
-import { useDrag } from "react-use-gesture";
+import { animated } from "react-spring";
 
 function Card(props) {
   
@@ -11,8 +9,8 @@ function Card(props) {
       <div className="card-exit"></div>
       <div className="card-content">
         <div className="card-image-container">
-          <img src={props.image} className="main-img" />
-          <img src={props.image} className="blur-img" />
+          <img src={props.image} className="main-img" alt="To accompany news article on Today"/>
+          <img src={props.image} className="blur-img" alt=""/>
         </div>
         <div className="card-counter">{props.counter}</div>
         <div className="card-text">

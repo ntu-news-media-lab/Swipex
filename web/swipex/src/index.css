@@ -21,7 +21,7 @@ code {
     -ms-user-select: none;
     user-select: none; */
 }
-
+/* 
 ::-webkit-scrollbar {
   width: 2px;
   height: 2px;
@@ -54,4 +54,4 @@ code {
 }
 ::-webkit-scrollbar-corner {
   background: transparent;
-}
+} */

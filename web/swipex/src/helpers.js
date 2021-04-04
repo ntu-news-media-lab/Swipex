@@ -60,3 +60,23 @@ export function getRandomIntInclusive(min, max) {
   max = Math.floor(max);
   return Math.floor(randomNumber * (max - min + 1)) + min;
 }
+
+export function mergeUserPreferences(hist_user_prefs, cur_user_prefs, MAX_SENSITIVITY_BUFFER) {
+  console.log(hist_user_prefs);
+  console.log(cur_user_prefs);
+  for (let category in hist_user_prefs) {
+    if (hist_user_prefs[category]["sensitivity_buffer"] < MAX_SENSITIVITY_BUFFER) {
+      hist_user_prefs[category]["score"] =
+        (hist_user_prefs[category]["score"] * hist_user_prefs[category]["num_cards"] +
+          cur_user_prefs[category]["score"] * cur_user_prefs[category]["num_cards"]) /
+        (cur_user_prefs[category]["num_cards"] + hist_user_prefs[category]["num_cards"]);
+      hist_user_prefs[category]["sensitivity_buffer"] += 1;
+    } else {
+      hist_user_prefs[category]["score"] =
+        (hist_user_prefs[category]["score"] * (MAX_SENSITIVITY_BUFFER - 1) + cur_user_prefs[category]["score"]) /
+        MAX_SENSITIVITY_BUFFER;
+    }
+    hist_user_prefs[category]["num_cards"] += cur_user_prefs[category]["num_cards"];
+  }
+  return hist_user_prefs;
+}
