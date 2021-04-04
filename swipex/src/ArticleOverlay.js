@@ -23,7 +23,7 @@ import tutorial_3 from "./res/tutorial_3.svg";
 import ending_1 from "./res/ending_1.svg";
 import nml_logo1 from "./res/news_media_lab_logo_1.png";
 import CardFullImage from "./CardFullImage.js";
- 
+
 function ArticleOverlay() {
   const domain = "http://swipex.pythonanywhere.com/";
   const NUM_MAX_ARTICLE_CARDS = 10; // max total no. of swipeable article cards
@@ -50,7 +50,7 @@ function ArticleOverlay() {
   // const READ_TIME_MULTIPLIER = 1.5;
   const MAX_SENSITIVITY_BUFFER = 4;
   const MIN_CATEGORY_PERCENT = Math.round(100 / NUM_CATEGORIES / 3);
- 
+
   const WINDOW_SIZE = useWindowDimensions();
   const DRAG_LEFT_THRESHOLD = WINDOW_SIZE.width / 4;
   const DRAG_RIGHT_THRESHOLD = WINDOW_SIZE.width / 3;
@@ -60,7 +60,7 @@ function ArticleOverlay() {
   const MAGIC_MULTIPLIER_ROTATE = 9;
   const OPACITY_TRANSITION = 0.6;
   const TRANSFORM_TRANSITION = 0.3;
- 
+
   const [userId, setUserId] = useState(undefined);
   // const [curUserPrefs, setCurUserPrefs] = useState(undefined);
   const [position, setPosition] = useState(0);
@@ -74,7 +74,7 @@ function ArticleOverlay() {
   const [numTutorialCards, setNumTutorialCards] = useState(0);
   const [numMaxArticleCards, setNumMaxArticleCards] = useState(0);
   const [fullArticleContent, setFullArticleContent] = useState(0);
- 
+
   useEffect(() => {
     let user_id;
     let hist_user_prefs;
@@ -84,7 +84,7 @@ function ArticleOverlay() {
     let new_view_articles = [];
     let is_new_user = false;
     let has_user_prefs = true;
- 
+
     if (window.localStorage) {
       // retrieve user_id if exists, else create a new one and setState
       user_id = window.localStorage.getItem("user_id");
@@ -128,9 +128,9 @@ function ArticleOverlay() {
     }
     console.log(`user_id:`, user_id);
     console.log(`user_prefs:`, window.localStorage.getItem("hist_user_prefs"));
- 
+
     // get articles that user has not read yet, process them and setState
-    fetch(`${domain}news/?user_id=${user_id}`)
+    fetch(`${domain}news/?user_id=${user_id}`, { mode: "no-cors" })
       .then((results) => results.json())
       .then((data) => {
         console.log("Success: /news", data);
@@ -187,7 +187,7 @@ function ArticleOverlay() {
         );
       });
   }, []);
- 
+
   // this runs whenever a card is swiped (ie. position state is changed)
   // it actually runs once when the page is loaded, but its too early (even before the state for numMaxArticleCards is set)
   useEffect(() => {
@@ -200,7 +200,7 @@ function ArticleOverlay() {
         image: viewArticles[position - numTutorialCards]["image"],
       };
       setFullArticleContent(new_full_article_content);
- 
+
       // make read more button visible
       document.getElementsByClassName("overlay-buttons")[0].style.display = "flex";
       setTimeout(function () {
@@ -213,7 +213,7 @@ function ArticleOverlay() {
         document.getElementsByClassName("overlay-buttons")[0].style.display = "none";
       }, 300); // corresponds to length of opacity transition on .overlay-buttons
     }
- 
+
     if (prevPosition !== undefined) {
       // End the timer state to get time spent, and get news_id of the card that was last swiped
       var new_timings = { ...viewTimings };
@@ -232,6 +232,7 @@ function ArticleOverlay() {
         if (new_time > READ_TIME_THRESHOLD) {
           fetch(`${domain}readers/`, {
             method: "POST",
+            mode: "no-cors",
             headers: {
               "Content-Type": "application/json",
             },
@@ -251,7 +252,7 @@ function ArticleOverlay() {
         // if: the card that was last swiped is a tutorial card, else if: start timer only when the current position is a not tutorial card
         setTimer(Date.now());
       }
- 
+
       let cur_user_prefs;
       let hist_user_prefs = window.localStorage.getItem("hist_user_prefs");
       // initialize and update a new set of CURRENT user preferences if the user has historical user preferences,
@@ -279,7 +280,7 @@ function ArticleOverlay() {
         console.log(cur_user_prefs);
         window.localStorage.setItem("cur_user_prefs", JSON.stringify(cur_user_prefs));
       }
- 
+
       // add more articles to be displayed, if user's current position is the last article currently being displayed AND also not the last card
       if (
         position - numTutorialCards == viewArticles.length - 1 &&
@@ -322,7 +323,7 @@ function ArticleOverlay() {
             ? Math.round((amt_redistribute / amt_retained) * merged_user_prefs[category]["score"])
             : 0;
         }
- 
+
         // Selection process
         let new_total = Object.values(merged_user_prefs).reduce((t, value) => t + value["score"], 0); // since after redistribution and rounding, total may not be 100
         console.log(new_total);
@@ -378,18 +379,18 @@ function ArticleOverlay() {
             }
             chosen_articles.splice(chosen_articles.indexOf(chosen_article), 1);
           }
- 
+
           if (found_article) {
             break;
           }
- 
+
           unavailable_categories.push(chosen_category);
           console.log("stuck3");
         }
       }
     }
   }, [position]);
- 
+
   const [{ x }, set] = useSpring(() => ({
     x: 0,
   }));
@@ -398,7 +399,7 @@ function ArticleOverlay() {
       // console.log(down, movement); // whether finger is down on the screen, swipe right and below is positive (x,y) movement
       const newSwipeStyles = swipeStyles.slice();
       // var new_move = movement[0];
- 
+
       if (down) {
         if (movement[0] <= 0 && position < numMaxArticleCards + numTutorialCards - 1 + 1) {
           // + 1 to account for ending thank you card
@@ -530,7 +531,7 @@ function ArticleOverlay() {
           className="explore_btn"
           alt="Open SwipeX"
           onClick={() => {
-            if (viewArticles!==undefined) {
+            if (viewArticles !== undefined) {
               document.getElementsByClassName("article_overlay")[0].style.display = "block";
               setTimeout(function () {
                 document.getElementsByClassName("article_overlay")[0].classList.add("fadein");
@@ -554,7 +555,7 @@ function ArticleOverlay() {
           }}
         />
       </div>
- 
+
       <div className="article_overlay">
         <animated.div className="swipeup_container" style={articleViewStyle}>
           <div className="card_view">
@@ -600,7 +601,7 @@ function ArticleOverlay() {
                 setTimeout(function () {
                   document.getElementsByClassName("article_overlay")[0].style.display = "none";
                 }, 500); // this aligns with the length of the opacity transition on article_overlay css class
- 
+
                 // Pause logic: similar logic as useEffect when index changes
                 var new_timings = { ...viewTimings };
                 let new_time = (Date.now() - timer) / 1000;
@@ -617,6 +618,7 @@ function ArticleOverlay() {
                   if (new_time > READ_TIME_THRESHOLD) {
                     fetch(`${domain}readers/`, {
                       method: "POST",
+                      mode: "no-cors",
                       headers: {
                         "Content-Type": "application/json",
                       },
@@ -648,6 +650,5 @@ function ArticleOverlay() {
     </div>
   );
 }
- 
+
 export default ArticleOverlay;
- 
