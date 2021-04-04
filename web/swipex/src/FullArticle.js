@@ -14,7 +14,7 @@ function FullArticle(props) {
             }}
           >
             <img src={arrow_down} alt="" />
-            Swipe to Return
+            Return
           </div>
         </div>
         <div className="article_container">
