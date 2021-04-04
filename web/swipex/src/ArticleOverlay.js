@@ -21,24 +21,39 @@ import tutorial_1 from "./res/tutorial_1.svg";
 import tutorial_2 from "./res/tutorial_2.svg";
 import tutorial_3 from "./res/tutorial_3.svg";
 import ending_1 from "./res/ending_1.svg";
+import nml_logo1 from "./res/news_media_lab_logo_1.png";
 import CardFullImage from "./CardFullImage.js";
 
 function ArticleOverlay() {
-  const domain = "http://localhost:8000/";
+  const domain = "http://swipex.pythonanywhere.com/";
   const NUM_MAX_ARTICLE_CARDS = 10; // max total no. of swipeable article cards
   const REC_THRESHOLD = 5; // calculate preferences for new users when at least 5 cards are viewed and timings noted
   const NUM_INITIAL_ARTICLES = 2; // number of new articles for returning users before recommendations are shown
   const tutorial_render = [tutorial_1, tutorial_2, tutorial_3];
   const NUM_TUTORIAL_RENDER = tutorial_render.length;
-  const CATEGORIES = ["singapore", "world", "big-read"];
+  const CATEGORIES = [
+    "World",
+    "Voices",
+    "The Big Read",
+    "Tech",
+    "Singapore",
+    "Politics",
+    "Health",
+    "Gen Y Speaks",
+    "Environment",
+    "Entertainment",
+    "Crime & Accident",
+    "Brand Spotlight",
+  ];
   const NUM_CATEGORIES = CATEGORIES.length;
   const READ_TIME_THRESHOLD = 12;
+  // const READ_TIME_MULTIPLIER = 1.5;
   const MAX_SENSITIVITY_BUFFER = 4;
   const MIN_CATEGORY_PERCENT = Math.round(100 / NUM_CATEGORIES / 3);
 
   const WINDOW_SIZE = useWindowDimensions();
-  const DRAG_LEFT_THRESHOLD = WINDOW_SIZE.width / 4.5;
-  const DRAG_RIGHT_THRESHOLD = WINDOW_SIZE.width / 4;
+  const DRAG_LEFT_THRESHOLD = WINDOW_SIZE.width / 4;
+  const DRAG_RIGHT_THRESHOLD = WINDOW_SIZE.width / 3;
   const SWIPED_CARDS_OFFSET = WINDOW_SIZE.width + 16;
   const OPACITY_OFFSET = 0.4;
   const MAGIC_MULTIPLIER_VERTICAL = 65;
@@ -50,6 +65,7 @@ function ArticleOverlay() {
   // const [curUserPrefs, setCurUserPrefs] = useState(undefined);
   const [position, setPosition] = useState(0);
   var prevPosition = usePrevious(position);
+  const [articleViewStyle, setArticleViewStyle] = useState({ transform: `translate3d(0, 0vh, 0)` });
   const [swipeStyles, setSwipeStyles] = useState(Array(NUM_MAX_ARTICLE_CARDS).fill({ opacity: 0 }, 1));
   const [viewTimings, setViewTimings] = useState({}); //Array(NUM_CARDS).fill({ news_id: undefined, seconds_spent: 0 })
   const [timer, setTimer] = useState(0);
@@ -83,7 +99,6 @@ function ArticleOverlay() {
       // check if historical user preferences and current user preferences exist, and merge them and save as hist_user_prefs
       hist_user_prefs = window.localStorage.getItem("hist_user_prefs");
       cur_user_prefs = window.localStorage.getItem("cur_user_prefs");
-      console.log("ERROR");
       console.log(hist_user_prefs);
       console.log(cur_user_prefs);
       if (hist_user_prefs !== null && cur_user_prefs !== null) {
@@ -98,10 +113,12 @@ function ArticleOverlay() {
       } else if (cur_user_prefs !== null) {
         // only cur_user_prefs may exist (users who use for the 2nd time), so save it as hist_user_prefs
         window.localStorage.setItem("hist_user_prefs", cur_user_prefs);
+        window.localStorage.removeItem("cur_user_prefs");
         console.log("2nd time user");
         console.log(cur_user_prefs);
+      } else if (hist_user_prefs !== null) {
+        console.log("returning user that did not start on cards previously");
       } else {
-        console.log("incomplete returning user");
         has_user_prefs = false;
       }
     } else {
@@ -122,7 +139,7 @@ function ArticleOverlay() {
             content: obj.content,
             headline: obj.headline,
             image: obj.image,
-            section: obj.section,
+            category: obj.category,
             title: obj.title,
           };
           return map;
@@ -156,7 +173,7 @@ function ArticleOverlay() {
             headline: data[object].headline,
             image: data[object].image,
             news_id: data[object].news_id,
-            section: data[object].section,
+            category: data[object].category,
             title: data[object].title,
           }))
         );
@@ -247,7 +264,7 @@ function ArticleOverlay() {
         }, {});
         console.log(cur_user_prefs);
         for (let news_id in new_timings) {
-          let category = allArticles[news_id]["section"];
+          let category = allArticles[news_id]["category"];
           cur_user_prefs[category]["score"] += new_timings[news_id] ** (1 / 2); // the more time you spent reading, the less important that additional time spent is
           cur_user_prefs[category]["num_cards"] += 1; // the total number of cards (including duplicate cards that were just browsed but on separate occasions)
           cur_user_prefs[category]["sensitivity_buffer"] += 1; // each card contributes 1 to the sensitivity buffer
@@ -273,13 +290,12 @@ function ArticleOverlay() {
           position - numTutorialCards == viewArticles.length - 1,
           position - numTutorialCards < numMaxArticleCards - 1
         );
-        let merged_user_prefs;
-        // console.log(hist_user_prefs);
         // if returning user, merge new_user_prefs with old_user_prefs, then select new article
-        console.log("ERROR");
+        let merged_user_prefs;
         console.log(hist_user_prefs);
         if (hist_user_prefs !== null) {
           console.log("merging");
+          console.log(hist_user_prefs, cur_user_prefs);
           merged_user_prefs = mergeUserPreferences(JSON.parse(hist_user_prefs), cur_user_prefs, MAX_SENSITIVITY_BUFFER);
         } else {
           console.log("using current preferences");
@@ -288,26 +304,30 @@ function ArticleOverlay() {
         console.log(merged_user_prefs);
         // Final processing before selecting
         let total = Object.values(merged_user_prefs).reduce((t, value) => t + value["score"], 0);
+        console.log(total);
         // scores to sum to 100 for better interpretation, with minimum score of MIN_CATEGORY_PERCENT, and calculate amount to be redistributed
-        let redistribution = 0;
+        let amt_redistribute = 0;
         for (let category in merged_user_prefs) {
           let raw_score = Math.round((merged_user_prefs[category]["score"] / total) * 100);
-          redistribution += raw_score < MIN_CATEGORY_PERCENT ? MIN_CATEGORY_PERCENT - raw_score : 0;
+          amt_redistribute += raw_score < MIN_CATEGORY_PERCENT ? MIN_CATEGORY_PERCENT - raw_score : 0;
           merged_user_prefs[category]["score"] = raw_score < MIN_CATEGORY_PERCENT ? MIN_CATEGORY_PERCENT : raw_score;
           merged_user_prefs[category]["above_threshold"] = raw_score < MIN_CATEGORY_PERCENT ? 0 : 1;
         }
-        let num_sharing = Object.values(merged_user_prefs).reduce((t, value) => t + value["above_threshold"], 0);
+        let amt_retained = Object.values(merged_user_prefs).reduce(
+          (t, value) => t + (value["above_threshold"] ? value["score"] : 0),
+          0
+        );
         for (let category in merged_user_prefs) {
           merged_user_prefs[category]["score"] -= merged_user_prefs[category]["above_threshold"]
-            ? Math.round(redistribution / num_sharing)
+            ? Math.round((amt_redistribute / amt_retained) * merged_user_prefs[category]["score"])
             : 0;
         }
 
         // Selection process
-        total = Object.values(merged_user_prefs).reduce((t, value) => t + value["score"], 0); // since after redistribution and rounding, total may not be 100
-        console.log(total);
+        let new_total = Object.values(merged_user_prefs).reduce((t, value) => t + value["score"], 0); // since after redistribution and rounding, total may not be 100
+        console.log(new_total);
         // creating a weighted array
-        let weighted_category_array = Array(total);
+        let weighted_category_array = Array(new_total);
         let starting_fill = 0;
         for (let index = 0; index < CATEGORIES.length; index++) {
           let category = CATEGORIES[index];
@@ -317,7 +337,7 @@ function ArticleOverlay() {
         // choosing a category (string) and then an article (news_id): it must not be those have been already displayed
         let unavailable_categories = [];
         let chosen_article;
-        let chosen_category = weighted_category_array[getRandomIntInclusive(0, total - 1)];
+        let chosen_category = weighted_category_array[getRandomIntInclusive(0, new_total - 1)];
         let found_article;
         while (true) {
           found_article = false;
@@ -325,12 +345,12 @@ function ArticleOverlay() {
             break;
           }
           while (unavailable_categories.includes(chosen_category)) {
-            chosen_category = weighted_category_array[getRandomIntInclusive(0, total - 1)];
+            chosen_category = weighted_category_array[getRandomIntInclusive(0, new_total - 1)];
             console.log("stuck1");
           }
           let chosen_articles = [];
           for (const [key, value] of Object.entries(allArticles)) {
-            if (value["section"] == chosen_category) {
+            if (value["category"] == chosen_category) {
               chosen_articles.push(key);
             }
           }
@@ -349,7 +369,7 @@ function ArticleOverlay() {
                 headline: allArticles[chosen_article].headline,
                 image: allArticles[chosen_article].image,
                 news_id: chosen_article,
-                section: allArticles[chosen_article].section,
+                category: allArticles[chosen_article].category,
                 title: allArticles[chosen_article].title,
               });
               setViewArticles(new_viewarticles);
@@ -374,13 +394,13 @@ function ArticleOverlay() {
     x: 0,
   }));
   const bind = useDrag(
-    ({ down, movement }) => {
+    ({ down, movement, swipe }) => {
       // console.log(down, movement); // whether finger is down on the screen, swipe right and below is positive (x,y) movement
       const newSwipeStyles = swipeStyles.slice();
       // var new_move = movement[0];
 
       if (down) {
-        if (movement[0] <= -2 && position < numMaxArticleCards + numTutorialCards - 1 + 1) {
+        if (movement[0] <= 0 && position < numMaxArticleCards + numTutorialCards - 1 + 1) {
           // + 1 to account for ending thank you card
           set({ x: movement[0] });
           newSwipeStyles[position] = {
@@ -395,11 +415,12 @@ function ArticleOverlay() {
           };
           newSwipeStyles[position + 1] = { opacity: -movement[0] / SWIPED_CARDS_OFFSET };
           setSwipeStyles(newSwipeStyles);
-        } else if (position > 0 && movement[0] >= 2) {
+        } else if (position > 0 && movement[0] > 0) {
           // update movement of previous card to the right
           newSwipeStyles[position] = {
             transform: `translate3d(0px, 0px, 0px)`,
             opacity: 1 - movement[0] / SWIPED_CARDS_OFFSET,
+            transition: `transform ${TRANSFORM_TRANSITION}s, opacity ${OPACITY_TRANSITION}s ease-out`,
           };
           // set({ x: -SWIPED_CARDS_OFFSET + movement[0] });
           newSwipeStyles[position - 1] = {
@@ -411,8 +432,12 @@ function ArticleOverlay() {
           };
           setSwipeStyles(newSwipeStyles);
         }
-      } else if (movement[0] < -DRAG_LEFT_THRESHOLD && position < numMaxArticleCards + numTutorialCards - 1 + 1) {
+      } else if (
+        (movement[0] < -DRAG_LEFT_THRESHOLD || swipe[0] === -1) &&
+        position < numMaxArticleCards + numTutorialCards - 1 + 1
+      ) {
         // drag to the left
+        console.log(swipe[0]);
         set({ x: 0 });
         newSwipeStyles[position] = {
           transform: `translate3d(${-SWIPED_CARDS_OFFSET}px, ${-MAGIC_MULTIPLIER_VERTICAL}px, 0px) rotate3d(0, 0, 1, ${MAGIC_MULTIPLIER_ROTATE}deg)`,
@@ -429,8 +454,9 @@ function ArticleOverlay() {
         }
         setSwipeStyles(newSwipeStyles);
         setPosition(position + 1);
-      } else if (movement[0] > DRAG_RIGHT_THRESHOLD && position > 0) {
+      } else if ((movement[0] > DRAG_RIGHT_THRESHOLD || swipe[0] === 1) && position > 0) {
         // drag to the right
+        console.log(swipe[0]);
         set({ x: 0 });
         newSwipeStyles[position - 1] = {
           transform: `translate3d(0px, 0px, 0px) rotate3d(0, 0, 1, 0deg)`,
@@ -441,7 +467,7 @@ function ArticleOverlay() {
         newSwipeStyles[position] = { opacity: 0, transition: `opacity ${OPACITY_TRANSITION}s ease-out`, zIndex: 0 };
         setSwipeStyles(newSwipeStyles);
         setPosition(position - 1);
-      } else if (movement[0] >= 2 && position > 0) {
+      } else if (movement[0] >= 0 && position > 0) {
         // never drag right enough
         set({ x: 0 });
         newSwipeStyles[position - 1] = {
@@ -452,7 +478,7 @@ function ArticleOverlay() {
         };
         newSwipeStyles[position] = { opacity: 1, transition: `opacity ${OPACITY_TRANSITION}s ease-out`, zIndex: 1 };
         setSwipeStyles(newSwipeStyles);
-      } else if (movement[0] <= -2 && position < numMaxArticleCards + numTutorialCards - 1 + 1) {
+      } else if (movement[0] < 0 && position < numMaxArticleCards + numTutorialCards - 1 + 1) {
         // never drag left enough
         set({ x: 0 });
         newSwipeStyles[position] = {
@@ -466,17 +492,34 @@ function ArticleOverlay() {
     },
     {
       bounds: { left: -SWIPED_CARDS_OFFSET, right: SWIPED_CARDS_OFFSET, top: 0, bottom: 0 },
+      swipeDistance: 40,
+      swipeVelocity: 0.3,
     }
   );
 
-  // const [{ y }, set] = useSpring(() => ({
-  //   y: 0,
-  // }));
-  // const bindswipeup = useDrag(({ swipe: [swipeY] }) => {
-  //   // position will either be -1, 0 or 1
-  //   setPosition(p => Math.min(Math.max(-1, p + swipeY), 1));
-  //   articleViewStyle
-  // })
+  const bindswipeup = useDrag(
+    ({ down, swipe, distance }) => {
+      if (!down && (swipe[1] === -1 || distance < 15)) {
+        console.log("swipe up");
+        setArticleViewStyle({
+          transform: "translate3d(0px, -100vh, 0px)",
+        });
+      }
+    },
+    { swipeDistance: 50, swipeVelocity: 0.3 }
+  );
+
+  const bindswipedown = useDrag(
+    ({ down, swipe, distance }) => {
+      if (!down && (swipe[1] === 1 || distance < 15)) {
+        console.log("swipe down");
+        setArticleViewStyle({
+          transform: "translate3d(0px, 0vh, 0px)",
+        });
+      }
+    },
+    { swipeDistance: 50, swipeVelocity: 0.3 }
+  );
 
   return (
     <div>
@@ -487,33 +530,35 @@ function ArticleOverlay() {
           className="explore_btn"
           alt="Open SwipeX"
           onClick={() => {
-            document.getElementsByClassName("article_overlay")[0].style.display = "block";
-            setTimeout(function () {
-              document.getElementsByClassName("article_overlay")[0].classList.add("fadein");
-              document.getElementsByTagName("body")[0].classList.add("scroll-lock");
-            }, 10);
-            if (position >= numTutorialCards && position != numTutorialCards + numMaxArticleCards) {
-              setTimer(Date.now() + 500);
-              let new_full_article_content = {
-                title: viewArticles[position - numTutorialCards]["title"],
-                content: viewArticles[position - numTutorialCards]["content"],
-                image: viewArticles[position - numTutorialCards]["image"],
-              };
-              setFullArticleContent(new_full_article_content);
-
-              document.getElementsByClassName("overlay-buttons")[0].style.display = "flex";
+            if (viewArticles!==undefined) {
+              document.getElementsByClassName("article_overlay")[0].style.display = "block";
               setTimeout(function () {
-                document.getElementsByClassName("overlay-buttons")[0].classList.add("fadein");
+                document.getElementsByClassName("article_overlay")[0].classList.add("fadein");
+                document.getElementsByTagName("body")[0].classList.add("scroll-lock");
               }, 10);
+              if (position >= numTutorialCards && position != numTutorialCards + numMaxArticleCards) {
+                setTimer(Date.now() + 500);
+                let new_full_article_content = {
+                  title: viewArticles[position - numTutorialCards]["title"],
+                  content: viewArticles[position - numTutorialCards]["content"],
+                  image: viewArticles[position - numTutorialCards]["image"],
+                };
+                setFullArticleContent(new_full_article_content);
+
+                document.getElementsByClassName("overlay-buttons")[0].style.display = "flex";
+                setTimeout(function () {
+                  document.getElementsByClassName("overlay-buttons")[0].classList.add("fadein");
+                }, 10);
+              }
             }
           }}
         />
       </div>
 
       <div className="article_overlay">
-        <div className="swipeup_container">
+        <animated.div className="swipeup_container" style={articleViewStyle}>
           <div className="card_view">
-            <animated.div className="overlay-cards_container" {...bind()}>
+            <div className="overlay-cards_container" {...bind()}>
               {numTutorialCards
                 ? tutorial_render.map((object, i) => (
                     <CardFullImage imagesrc={object} style={swipeStyles[i]} key={`tut_${i}`} />
@@ -522,7 +567,7 @@ function ArticleOverlay() {
               {viewArticles
                 ? viewArticles.map((object, i) => (
                     <Card
-                      category={capitalize(object.section)}
+                      category={capitalize(object.category)}
                       title={object.title}
                       summary={object.headline}
                       style={swipeStyles[i + numTutorialCards]}
@@ -536,16 +581,11 @@ function ArticleOverlay() {
                 imagesrc={ending_1}
                 style={swipeStyles[numTutorialCards + numMaxArticleCards]}
                 key={`ending`}
+                // nml_logo_style={[nml_logo1, {opacity: 1}]}
               />
-            </animated.div>
+            </div>
             <div className="overlay-buttons">
-              <div
-                className="read_more-button"
-                onClick={() => {
-                  // TODO: Add actual swipe up gesture
-                  document.getElementsByClassName("swipeup_container")[0].classList.add("swiped_up");
-                }}
-              >
+              <div className="read_more-button" {...bindswipeup()}>
                 <img src={arrow_up} alt=""></img>
                 Read More
               </div>
@@ -601,8 +641,9 @@ function ArticleOverlay() {
             title={fullArticleContent["title"]}
             content={fullArticleContent["content"]}
             image={fullArticleContent["image"]}
+            onSwipe={bindswipedown}
           />
-        </div>
+        </animated.div>
       </div>
     </div>
   );

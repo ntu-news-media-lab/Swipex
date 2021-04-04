@@ -1,5 +1,5 @@
 import "./FullArticle.css";
-import arrow_down from "./res/arrow_down.png";
+import arrow_down from "./res/arrow_down.svg";
 
 function FullArticle(props) {
   return (
@@ -8,13 +8,10 @@ function FullArticle(props) {
         <div className="article_overlay-buttons">
           <div
             className="read_less-button"
-            onClick={() => {
-              // TODO: Add actual swipe down gesture
-              document.getElementsByClassName("swipeup_container")[0].classList.remove("swiped_up");
-            }}
+            {...props.onSwipe()}
           >
             <img src={arrow_down} alt="" />
-            Return
+            Swipe to Return
           </div>
         </div>
         <div className="article_container">

@@ -61,14 +61,16 @@
 }
 
 .read_less-button {
-  padding: 8px 16px 8px 16px;
+  padding: 8px 0px;
+  width: 90%;
   display: inline-flex;
   flex-direction: column;
   align-items: center;
   font-size: 13px;
   font-weight: bold;
-  color: #f5f5f5;
+  color: #C2C2C2;
   letter-spacing: 0.5px;
+  touch-action: none;
 }
 
 .article_overlay-buttons {
@@ -77,4 +79,11 @@
   justify-content: space-evenly;
   display: flex;
   align-items: center;
+
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
