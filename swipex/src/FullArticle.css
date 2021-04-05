@@ -8,6 +8,11 @@
   src: url(./res/OpenSans-Regular.ttf) format('truetype');
 }
 
+@font-face {
+  font-family: 'Oxygen-Regular';
+  src: url(./res/Oxygen-Regular.ttf) format('truetype');
+}
+
 
 .article_view {
   width: 100%;
@@ -23,7 +28,7 @@
 }
 
 .article_container {
-  background: #fffffff1;
+  background: #fafafa;
   min-height: 92%;
 }
 
@@ -53,11 +58,15 @@
 }
 
 .article_content {
-  font-family: 'OpenSans-Regular';
-  font-size: 14px;
-  line-height: 165%;
-  padding: 8px 12px 64px 12px;
+  font-family: 'Oxygen-Regular';
+  font-size: 16px;
+  line-height: 155%;
+  padding: 8px 16px 64px 16px;
   color: #000000;
+}
+
+p {
+  padding-bottom: 16px;
 }
 
 .read_less-button img {
