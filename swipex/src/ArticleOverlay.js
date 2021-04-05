@@ -74,6 +74,7 @@ function ArticleOverlay() {
   const [numTutorialCards, setNumTutorialCards] = useState(0);
   const [numMaxArticleCards, setNumMaxArticleCards] = useState(0);
   const [fullArticleContent, setFullArticleContent] = useState(0);
+  const [dynamicHeightUnit, setDynamicHeightUnit] = useState(window.innerHeight * 0.01);
 
   useEffect(() => {
     let user_id;
@@ -84,6 +85,20 @@ function ArticleOverlay() {
     let new_view_articles = [];
     let is_new_user = false;
     let has_user_prefs = true;
+
+    window.addEventListener("resize", () => {
+      // We execute the same script as before
+      setDynamicHeightUnit(window.innerHeight * 0.01);
+    });
+
+    // document.querySelector(".article_card").addEventListener('scroll', () => {
+    //   // We execute the same script as before
+    //   if (document.querySelector(".article_card").scrollTop===0) {
+    //     document.querySelector(".article_card").style.touchAction = "pan-x";
+    //   } else {
+    //     document.querySelector(".article_card").style.touchAction = "auto";
+    //   }
+    // });
 
     if (window.localStorage) {
       // retrieve user_id if exists, else create a new one and setState
@@ -501,29 +516,40 @@ function ArticleOverlay() {
     }
   );
 
-  const bindswipeup = useDrag(
+  const bind_swipeup_click = useDrag(
     ({ down, swipe, distance }) => {
       if (!down && (swipe[1] === -1 || distance < 15)) {
         console.log("swipe up");
         setArticleViewStyle({
           transform: "translate3d(0px, -100vh, 0px)",
         });
+        document.querySelector(".article_card").scrollTop = 0;
       }
     },
     { swipeDistance: 50, swipeVelocity: 0.3 }
   );
 
   const bindswipedown = useDrag(
-    ({ down, swipe, distance }) => {
-      if (!down && (swipe[1] === 1 || distance < 15)) {
+    ({ down, swipe, movement, cancel }) => {
+      
+      console.log(document.querySelector(".article_card").scrollTop, down, movement[1], swipe[1]);
+      if (Math.abs(movement[1]) > 0) {
+        // document.querySelector(".article_card").style.touchAction = "auto";
+      }
+      if (!down && swipe[1] === 1) {
         console.log("swipe down");
-        setArticleViewStyle({
-          transform: "translate3d(0px, 0vh, 0px)",
-        });
+        swipedownfunction();
       }
     },
-    { swipeDistance: 50, swipeVelocity: 0.3 }
+    { swipeDistance: 50, swipeVelocity: 0.5 }
   );
+
+  const swipedownfunction = () => {
+    console.log("returning");
+    setArticleViewStyle({
+      transform: "translate3d(0px, 0vh, 0px)",
+    });
+  };
 
   return (
     <div>
@@ -562,7 +588,7 @@ function ArticleOverlay() {
       <div className="article_overlay">
         <animated.div className="swipeup_container" style={articleViewStyle}>
           <div className="card_view">
-            <div className="overlay-cards_container" {...bind()}>
+            <div className="overlay-cards_container" {...bind()} style={{ height: `${90 * dynamicHeightUnit}px` }}>
               {numTutorialCards
                 ? tutorial_render.map((object, i) => (
                     <CardFullImage imagesrc={object} style={swipeStyles[i]} key={`tut_${i}`} />
@@ -589,7 +615,7 @@ function ArticleOverlay() {
               />
             </div>
             <div className="overlay-buttons">
-              <div className="read_more-button" {...bindswipeup()}>
+              <div className="read_more-button" {...bind_swipeup_click()}>
                 <img src={arrow_up} alt=""></img>
                 Read More
               </div>
@@ -647,6 +673,7 @@ function ArticleOverlay() {
             content={fullArticleContent["content"]}
             image={fullArticleContent["image"]}
             onSwipe={bindswipedown}
+            onClick={swipedownfunction}
           />
         </animated.div>
       </div>

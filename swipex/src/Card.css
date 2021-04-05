@@ -16,13 +16,14 @@
   height: 100%;
   width: 100%;
   padding: 0 16px 0 16px;
-  touch-action: pan-y; /*in order to work on chrome inspector */
+  touch-action: none; /*in order to work on chrome inspector */
   align-content: center;
 }
 
 .card-category {
   position: relative;
   height: calc(1.5 / 30 * 100%);
+  min-height: 32px;
   top: calc(1.5 / 30 * 100%);
   background: #C13D32;
   border-radius: 13.5px;
@@ -123,14 +124,11 @@
 }
 
 .card-summary {
-  font-size: 12px;
-  line-height: 18px;
+  font-size: 13px;
+  line-height: 20px;
   /* or 125% */
-
-  overflow-y: hidden;
-  touch-action: none; /* so that we can manually handle all touch related gestures, if not the browser will attempt to scroll */
+   /*touch-action: none; so that we can manually handle all touch related gestures, if not the browser will attempt to scroll */
   padding: 4px 0;
-
   color: rgba(81, 81, 81, 0.9);
 }
 

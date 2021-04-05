@@ -34,6 +34,7 @@
   width: 100%;
   position: relative;
   align-content: center;
+  transition: height 0.2s ease-out;
 }
 
 .overlay-buttons {
@@ -76,7 +77,8 @@
 } */
 
 .read_more-button {
-  padding: 8px 32px;
+  padding: 8px 0px;
+  width: 90%;
   letter-spacing: 0.5px;
   display: inline-flex;
   flex-direction: column;

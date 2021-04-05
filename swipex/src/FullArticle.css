@@ -3,21 +3,28 @@
   src: url(./res/Inter-SemiBold.ttf) format('truetype');
 }
 
+@font-face {
+  font-family: 'OpenSans-Regular';
+  src: url(./res/OpenSans-Regular.ttf) format('truetype');
+}
+
 
 .article_view {
   width: 100%;
   height: 100%;
+  position: absolute;
 }
 
 .article_card {
   height: 100%;
   width: 100%;
   overflow-y: auto;
+  /* touch-action: pan-x; */
 }
 
 .article_container {
   background: #fffffff1;
-  min-height: 90%;
+  min-height: 92%;
 }
 
 .article_title {
@@ -46,11 +53,10 @@
 }
 
 .article_content {
+  font-family: 'OpenSans-Regular';
   font-size: 14px;
   line-height: 165%;
   padding: 8px 12px 64px 12px;
-  display: flex;
-  align-items: center;
   color: #000000;
 }
 
@@ -74,7 +80,7 @@
 }
 
 .article_overlay-buttons {
-  height: 10%;
+  height: 8%;
   justify-content: center;
   justify-content: space-evenly;
   display: flex;

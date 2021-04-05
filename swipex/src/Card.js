@@ -6,7 +6,6 @@ function Card(props) {
   return (
     <animated.div className="card" style={props.style}>
       <div className="card-category">{props.category}</div>
-      <div className="card-exit"></div>
       <div className="card-content">
         <div className="card-image-container">
           <img src={props.image} className="main-img" alt="To accompany news article on Today"/>
