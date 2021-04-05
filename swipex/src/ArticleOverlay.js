@@ -25,7 +25,7 @@ import nml_logo1 from "./res/news_media_lab_logo_1.png";
 import CardFullImage from "./CardFullImage.js";
 
 function ArticleOverlay() {
-  const domain = "http://swipex.pythonanywhere.com/";
+  const domain = "https://swipex.pythonanywhere.com/";
   const NUM_MAX_ARTICLE_CARDS = 10; // max total no. of swipeable article cards
   const REC_THRESHOLD = 5; // calculate preferences for new users when at least 5 cards are viewed and timings noted
   const NUM_INITIAL_ARTICLES = 2; // number of new articles for returning users before recommendations are shown
@@ -130,7 +130,10 @@ function ArticleOverlay() {
     console.log(`user_prefs:`, window.localStorage.getItem("hist_user_prefs"));
 
     // get articles that user has not read yet, process them and setState
-    fetch(`${domain}news/?user_id=${user_id}`, { mode: "no-cors" })
+    fetch(
+      `${domain}news/?user_id=${user_id}`
+      // { mode: "no-cors" }
+    )
       .then((results) => results.json())
       .then((data) => {
         console.log("Success: /news", data);
@@ -232,7 +235,7 @@ function ArticleOverlay() {
         if (new_time > READ_TIME_THRESHOLD) {
           fetch(`${domain}readers/`, {
             method: "POST",
-            mode: "no-cors",
+            // mode: "no-cors",
             headers: {
               "Content-Type": "application/json",
             },
@@ -618,7 +621,7 @@ function ArticleOverlay() {
                   if (new_time > READ_TIME_THRESHOLD) {
                     fetch(`${domain}readers/`, {
                       method: "POST",
-                      mode: "no-cors",
+                      // mode: "no-cors",
                       headers: {
                         "Content-Type": "application/json",
                       },
