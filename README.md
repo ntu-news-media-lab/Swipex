@@ -3,13 +3,13 @@
 SwipeX is a mobile web feature that allows users to read the news more productively by providing bite-sized summaries that are easily comprehensible, encouraging them to read more stories and widely while also reading stories they enjoy.
 
 ## Table of Contents:
-1. Introduction
-2. Requirements
-3. Setup
-4. Usage
-5. Future Iterations
-6. Acknowledgements
-7. Team
+1. [Introduction](https://github.com/lihaan/Swipex#1-introduction)
+2. [Requirements](https://github.com/lihaan/Swipex#2-requirements)
+3. [Setup](https://github.com/lihaan/Swipex#3-setup)
+4. [Usage](https://github.com/lihaan/Swipex#4-usage)
+5. [Future Iterations](https://github.com/lihaan/Swipex#5-future-iterations)
+6. [Acknowledgements](https://github.com/lihaan/Swipex#6-acknowledgements)
+7. [Team](https://github.com/lihaan/Swipex#7-team)
 
 
 ## 1. Introduction
@@ -26,17 +26,18 @@ SwipeX aims to:
 
 ## 4. Usage
 Watch a demo of SwipeX
+[![SwipeX Demo](https://img.youtube.com/vi/C1pb9VR46q0/0.jpg)](https://youtu.be/C1pb9VR46q0 "SwipeX Demo")
 
 #### Key Features
-+ **User onboarding**
+##### User onboarding
 User taps on the SwipeX bubble and is introduced to a quick tutorial. The 3 tutorial cards provide information about the functions of SwipeX.
-+ **Card swiping**
+##### Card swiping
 Each piece of news is displayed on a card. Users can swipe left to read the next card, swipe right to go back to the previous one, and swipe up to read the full article if interested.
-+ **Bite-sized summary**
+##### Bite-sized summary
 A short summary of news is provided on each card that enables users to capture the most essential information in a short time.
-+ **Personalisation**
+##### Personalisation
 After spending sufficient time on SwipeX, our tool learns the preferences of the user. The tool will start to provide news cards that potentially interest the user. 
-+ **Metrics**
+##### Metrics
 SwipeX will collect and store certain types of non-sensitive user data. The number of unique users a day and the number of new users a day can be measured for reach and growth. The number of users who swiped more than about 7 cards and the number of returning users within their first week of use are measured to determine the retention rate. Time spent per card collected to personalise the news stories better.
 
 ## 5. Future Iterations
