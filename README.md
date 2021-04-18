@@ -23,6 +23,7 @@ SwipeX aims to:
 - Nodejs
 - Yarn or npm package manager
 - A browser that supports localstorage
+
 ##### Backend Django server
 - Python Package Installer (https://pypi.org/project/pip/)
 
@@ -37,11 +38,12 @@ SwipeX aims to:
 > npm install
 3. To launch React app:
 > npm start
+
 ##### Backend Django server
 6. To navigate to the back-end Django project: > cd backend/today
 7. To install Python dependencies:
- > pip install django
- > pip install Django-cors-headers
+ > pip install django <br>
+ > pip install Django-cors-headers <br>
  > pip install djangorestframework
 8. To launch the Django server:
 > python manage.py runserver
