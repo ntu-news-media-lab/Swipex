@@ -19,13 +19,37 @@ SwipeX aims to:
 
 
 ## 2. Requirements
-
+##### Front-end React app
+- Nodejs
+- Yarn or npm package manager
+- A browser that supports localstorage
+##### Backend Django server
+- Python Package Installer (https://pypi.org/project/pip/)
 
 ## 3. Setup
+1. Download and unzip this code repository into your desired file directory
+2. Open the command line and navigate to the root of the repository
+
+##### Front-end React app
+1. To navigate to the front-end React project:
+> cd swipex
+2. To install Nodejs dependencies:
+> npm install
+3. To launch React app:
+> npm start
+##### Backend Django server
+6. To navigate to the back-end Django project: > cd backend/today
+7. To install Python dependencies:
+ > pip install django
+ > pip install Django-cors-headers
+ > pip install djangorestframework
+8. To launch the Django server:
+> python manage.py runserver
+
 
 
 ## 4. Usage
-Watch a demo of SwipeX
+##### Watch a demo of SwipeX
 [![SwipeX Demo](https://img.youtube.com/vi/C1pb9VR46q0/0.jpg)](https://youtu.be/C1pb9VR46q0 "SwipeX Demo")
 
 #### Key Features
@@ -48,7 +72,6 @@ We hope to improve the product through further iterations:
 + Sophisticated machine learning that will recommend articles to users based on other users of similar reading habits
 
 
-
 ## 6. Acknowledgements
 Ms Jessica Tan and Miss Joan Kelly for their guidance throughout the News Media Lab course.
 
@@ -59,6 +82,6 @@ Our industry mentor Janie Octia from CrowdTangle @ Facebook for her expert guida
 Users from our research process, for providing us with insightful comments and feedback.
 
 ## 7. Team
-Journalists: Brandon Alexius Chia, Heather Ho, Tiffany Tan (leader)
-Designers: Bella Dai, Lin Sining
-Developers: Ong Li Han, Koh Luo Hao, Xue Fuguo
+- Journalists: Brandon Alexius Chia, Heather Ho, Tiffany Tan (leader)
+- Designers: Bella Dai, Lin Sining
+- Developers: Ong Li Han, Koh Luo Hao, Xue Fuguo
