@@ -21,7 +21,6 @@ import tutorial_1 from "./res/tutorial_1.svg";
 import tutorial_2 from "./res/tutorial_2.svg";
 import tutorial_3 from "./res/tutorial_3.svg";
 import ending_1 from "./res/ending_1.svg";
-import nml_logo1 from "./res/news_media_lab_logo_1.png";
 import CardFullImage from "./CardFullImage.js";
 
 function ArticleOverlay() {
