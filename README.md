@@ -10,6 +10,7 @@ SwipeX is a mobile web feature that allows users to read the news more productiv
 5. [Future Iterations](#5-future-iterations)
 6. [Acknowledgements](#6-acknowledgements)
 7. [Team](#7-team)
+8. [License and Attribution](#8-license-and-attribution)
 
 
 ## 1. Introduction
