@@ -56,6 +56,8 @@ SwipeX aims to:
 ##### Watch a demo of SwipeX
 [![SwipeX Demo](https://img.youtube.com/vi/C1pb9VR46q0/0.jpg)](https://youtu.be/C1pb9VR46q0 "SwipeX Demo")
 
+You can also view the prototype [here](https://news-media-lab-swipex.herokuapp.com/). For the most optimal experience, please open developer tools and/or resize your browser window to mimic that of a mobile phone.
+
 #### Key Features
 ##### User onboarding
 User taps on the SwipeX bubble and is introduced to a quick tutorial. The 3 tutorial cards provide information about the functions of SwipeX.
