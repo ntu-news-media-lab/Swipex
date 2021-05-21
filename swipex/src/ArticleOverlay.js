@@ -21,7 +21,7 @@ import tutorial_1 from "./res/tutorial_1.svg";
 import tutorial_2 from "./res/tutorial_2.svg";
 import tutorial_3 from "./res/tutorial_3.svg";
 import ending_1 from "./res/ending_1.svg";
-import nml_logo1 from "./res/news_media_lab_logo_1.png";
+import product_prototype_nml_logo_1_black from "./res/product_prototype_nml_logo_1_black.jpg";
 import CardFullImage from "./CardFullImage.js";
 
 function ArticleOverlay() {
@@ -591,7 +591,7 @@ function ArticleOverlay() {
             <div className="overlay-cards_container" {...bind()} style={{ height: `${90 * dynamicHeightUnit}px` }}>
               {numTutorialCards
                 ? tutorial_render.map((object, i) => (
-                    <CardFullImage imagesrc={object} style={swipeStyles[i]} key={`tut_${i}`} />
+                    <CardFullImage imagesrc={object} style={swipeStyles[i]} key={`tut_${i}`} nml_logo_style={false}/>
                   ))
                 : ""}
               {viewArticles
@@ -611,7 +611,7 @@ function ArticleOverlay() {
                 imagesrc={ending_1}
                 style={swipeStyles[numTutorialCards + numMaxArticleCards]}
                 key={`ending`}
-                // nml_logo_style={[nml_logo1, {opacity: 1}]}
+                nml_logo_style={product_prototype_nml_logo_1_black}
               />
             </div>
             <div className="overlay-buttons">
